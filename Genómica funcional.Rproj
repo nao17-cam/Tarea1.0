@@ -1,0 +1,122 @@
+#Actualizar R
+
+## En caso de no contar con BiocManager. Descargar.
+
+#if (!require("BiocManager", quietly = TRUE))
+#  install.packages("BiocManager")
+#BiocManager::install()
+
+BiocManager::install("Biostrings")
+
+## Llamar las librerías BiocManager y Biostrings
+
+library(BiocManager)
+
+library(Biostrings)
+
+### Encontrar la secuencias de aminoácidos mediante el archivo FASTA
+
+##Subir las secuencias concatenadas. Para lo que se usará *readRNAStringSet*
+#Pondremos entre comillas el nombre de nuestro archivo.
+
+concatenadoFasta1 <- readRNAStringSet("first (1).fasta")
+
+## Vamos a traducir nuestras secuencias mediante *translate* 
+
+secuencias_aa <- translate (concatenadoFasta1)
+secuencias_aa #Imprimimos el objeto secuencias_aa
+
+
+###################################################
+### Resolver 2 ejercicios de la plataforma Rosalind
+
+## 1. Conteo del número de nucleotidos.
+
+#Mediante librería especializada...
+#Defino mi cadena de caracteres que me da el problema en Rosalind.
+#Para lo que uso la función * DNAString* y pongo mi cadena entre comillas.
+
+dna1 <- DNAString("AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC")
+dna1
+
+#Uso alphabetFrequency para calcular la frecuencia de cada nucleotido.
+#Pero no solo salen los nucleotidos, por lo que para esta función no es una buena alternativa
+alphabetFrequency(dna1)
+
+#Por ello usaremos *letterFrequency*, de este modo sólo salen los nucleotidos que son AGTC
+letterFrequency(dna1, c("A","G","T","C"))
+
+
+##Mediante R básico... 
+
+# Creamos un vector con la secuencia 
+secuencia <- "AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC"
+dna2 <- strsplit(secuencia,"")
+
+nucleotido_A <- gsub("A", "", dna2)
+A <- nchar(dna2)-nchar(nucleotido_A)
+nucleotido_C <- gsub("C", "", dna2)
+C <- nchar(dna2)-nchar(nucleotido_C)
+nucleotido_G <- gsub("G", "", dna2)
+G <- nchar(dna2)-nchar(nucleotido_G)
+nucleotido_T <- gsub("T", "", dna2)
+T <- nchar(dna2)-nchar(nucleotido_T)
+(print (c(A,C,G,T)))
+      
+
+
+
+###### ¿Cómo le hago para que solo me salga el número y no la descripción?######
+
+###################################################################
+## 2. C�lculo del contenido de GC
+## Mediante libreria especializada
+
+# Hacemos nuestras cadenas de ADN
+dna1_6404 <- DNAString("CCTGCGGAAGATCGGCACTAGAATAGCCAGAACCGTTTCTCTGAGGCTTCCGGCCTTCCCTCCCACTAATAATTCTGAGG")
+dna1_5959 <- DNAString("CCATCGGTAGCGCATCCTTAGTCCAATTAAGTCCCTATCCAGGCGCTCCGCCGAAGGTCTATTCCATTTGTCAGCAGACACGC")
+dna1_0808 <- DNAString("CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAAACGCTTCAGACCAGCCCGGACTGGGAACCTGCGGGCAGTAGGTGGAAT")
+
+#Sacamos la frecuencia tanto de C como de G, la multiplicamos por 100 y dividimos entre la longitud de la cadena
+#De modo que estamos sacando el promedio. 
+  cadena1 <- letterFrequency(dna1_6404, c("C"))*100/length(dna1_6404)
+  cadena1
+  cadena1.0 <- letterFrequency(dna1_6404, c("G"))*100/length(dna1_6404)
+  cadena1.0
+  suma1 <- sum(cadena1+cadena1.0)/2 #Sumamos los dos promedios y dividimos entre dos
+  suma1
+  cadena2 <- letterFrequency(dna1_5959, c("C"))*100/length(dna1_5959)
+  cadena2
+  cadena2.0 <- letterFrequency(dna1_5959, c("G"))*100/length(dna1_5959)
+  cadena2.0
+  suma2 <- sum(cadena2+cadena2.0)/2 #Sumamos los dos promedios y dividimos entre dos
+  suma2
+  cadena3 <- letterFrequency(dna1_0808, c("C"))*100/length(dna1_0808)
+  cadena3
+  cadena3.0 <- letterFrequency(dna1_0808, c("G"))*100/length(dna1_0808)
+  cadena3.0
+  suma3 <- sum(cadena3+cadena3.0)/2 #Sumamos y dividimos entre dos
+  suma3
+  
+if (suma1 == suma2){
+  return(print("Las secuencias 6404 y 5959 son iguales"))
+}else if (suma2 == suma3){
+  return(print("Las secuencias 6404 y 5959 son iguales"))
+}else if (suma1 == suma3){
+  return(print("Las secuencias 6404 y 0808 son iguales"))
+}else if (suma1 > suma2){
+  return(print(paste("La secuencia 6404 es mayor que 5959","su promedio es:",suma1)))
+}else if (suma2 > suma3){
+  return(print(paste("La secuencia 5959 es mayor que 0808","su promedio es:",suma2)))
+}else if (suma1 > suma3){
+  return(print(paste("La secuencia 6404 es mayor que 0808","su promedio es:",suma1)))
+}else if (suma2 < suma3){
+  return(print(paste("La secuencia 0808 es mayor que 5959","su promedio es:",suma3)))
+}else if (suma1 < suma2){
+  return(print(paste("La secuencia 5959 es mayor que 6404","su promedio es:",suma2)))
+}else if (suma1 < suma3){
+  return(print(paste("La secuencia 0808 es mayor que 6404","su promedio es:",suma3)))
+}
+  
+  
+  
